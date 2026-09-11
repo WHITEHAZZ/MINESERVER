@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MineForge — Minecraft Server Hosting</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#070b0a;--card:#0e1512;--line:#1c2a24;--green:#55e878;--text:#f4fff7;--muted:#91a59a}
+body{font-family:Inter,Segoe UI,Arial,sans-serif;background:radial-gradient(circle at 70% 10%,#12351d 0,transparent 30%),var(--bg);color:var(--text);min-height:100vh}
+nav{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 7%;border-bottom:1px solid var(--line);backdrop-filter:blur(12px);position:sticky;top:0;background:#070b0add;z-index:5}
+.logo{font-size:22px;font-weight:900;letter-spacing:.5px}.logo span{color:var(--green)}
+.navlinks{display:flex;gap:26px}.navlinks a{color:#b9c9bf;text-decoration:none;font-size:14px}.navlinks a:hover{color:#fff}
+.btn{border:0;border-radius:10px;padding:12px 18px;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#061008;box-shadow:0 0 25px #55e87825}.ghost{background:#111b16;color:#dcebe1;border:1px solid var(--line)}
+.hero{max-width:1100px;margin:auto;padding:105px 24px 80px;text-align:center}
+.badge{display:inline-block;border:1px solid #285a38;background:#0c2414;color:#80f49c;padding:7px 12px;border-radius:99px;font-size:12px;margin-bottom:22px}
+h1{font-size:clamp(42px,7vw,78px);line-height:.98;letter-spacing:-3px;max-width:850px;margin:auto}
+h1 span{color:var(--green)}.hero p{color:var(--muted);max-width:650px;margin:25px auto 30px;font-size:17px;line-height:1.6}
+.actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.section{max-width:1100px;margin:auto;padding:35px 24px 90px}.section h2{text-align:center;font-size:30px;margin-bottom:10px}.sub{text-align:center;color:var(--muted);margin-bottom:35px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:linear-gradient(145deg,#101914,#0b110e);border:1px solid var(--line);border-radius:16px;padding:25px}.icon{font-size:28px;margin-bottom:15px}.card h3{margin-bottom:8px}.card p{color:var(--muted);font-size:14px;line-height:1.55}
+.modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:20px;z-index:10}.modal.show{display:flex}.panel{width:min(600px,100%);background:#0b120f;border:1px solid #294036;border-radius:18px;padding:28px;box-shadow:0 25px 100px #000}
+.panelhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.close{background:none;border:0;color:#9daf a5;color:#9daf a5;font-size:25px;cursor:pointer}
+label{display:block;font-size:13px;color:#b9c9bf;margin:15px 0 7px}input,select{width:100%;padding:13px;background:#070c09;border:1px solid #24342c;border-radius:10px;color:#fff;outline:none}input:focus,select:focus{border-color:var(--green)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.server-card{display:none;margin-top:35px;background:#0d1712;border:1px solid #285638;border-radius:16px;padding:24px}.server-card.show{display:block}.status{color:var(--green);font-weight:800;font-size:13px}.ip{font-family:monospace;background:#07100b;padding:12px;border-radius:9px;margin:14px 0;color:#baffc8}
+footer{text-align:center;border-top:1px solid var(--line);padding:25px;color:#65786d;font-size:13px}
+@media(max-width:700px){.navlinks{display:none}.features{grid-template-columns:1fr}.grid{grid-template-columns:1fr}nav{padding:0 20px}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">⛏ <span>Mine</span>Forge</div>
+  <div class="navlinks"><a href="#features">Features</a><a href="#how">How it works</a></div>
+  <button class="btn primary" onclick="openCreate()">Create Server</button>
+</nav>
+
+<main>
+<section class="hero">
+  <div class="badge">⚡ FAST • SIMPLE • MINECRAFT READY</div>
+  <h1>Your Minecraft world.<br><span>Your server.</span></h1>
+  <p>Create and manage your Minecraft server from one simple dashboard. Pick your version, configure your server, and get started in seconds.</p>
+  <div class="actions">
+    <button class="btn primary" onclick="openCreate()">🚀 Create a Server</button>
+    <button class="btn ghost" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Explore Features</button>
+  </div>
+  <div id="serverCard" class="server-card">
+    <div class="status">● SERVER CREATED — DEMO MODE</div>
+    <h2 id="serverTitle" style="margin-top:8px"></h2>
+    <div class="ip"><span id="serverIp">play.mineforge.local</span> <button class="btn ghost" style="float:right;padding:6px 9px" onclick="copyIp()">Copy</button></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;color:#aabbb0;font-size:13px">
+      <span id="serverType"></span><span>•</span><span id="serverVersion"></span><span>•</span><span id="serverPlayers"></span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features">
+<h2>Everything you need</h2><p class="sub">A clean control panel without the confusing stuff.</p>
+<div class="features">
+ <div class="card"><div class="icon">⚙️</div><h3>Easy Setup</h3><p>Choose your edition, version, server type and player limit with a few clicks.</p></div>
+ <div class="card"><div class="icon">🚀</div><h3>Quick Launch</h3><p>Designed for fast server deployment and simple management.</p></div>
+ <div class="card"><div class="icon">🛡️</div><h3>Server Control</h3><p>Keep your server settings organized in one dashboard.</p></div>
+</div>
+</section>
+
+<section class="section" id="how">
+<h2>How it works</h2><p class="sub">Three steps from idea to multiplayer.</p>
+<div class="features">
+ <div class="card"><h3>01 — Configure</h3><p>Pick your Minecraft edition and server settings.</p></div>
+ <div class="card"><h3>02 — Create</h3><p>Give your server a name and create it.</p></div>
+ <div class="card"><h3>03 — Play</h3><p>Use your server address to connect with friends.</p></div>
+</div>
+</section>
+</main>
+<footer>© 2026 MineForge • Minecraft is a trademark of Mojang Studios.</footer>
+
+<div class="modal" id="modal">
+<div class="panel">
+ <div class="panelhead"><h2>Create your server</h2><button class="close" onclick="closeCreate()">×</button></div>
+ <form id="form">
+  <label>Server Name</label><input id="name" placeholder="My Awesome Server" required>
+  <div class="grid">
+   <div><label>Edition</label><select id="edition"><option>Java</option><option>Bedrock</option></select></div>
+   <div><label>Version</label><select id="version"><option>1.21.8</option><option>1.21.7</option><option>1.21.6</option><option>1.20.6</option></select></div>
+  </div>
+  <div class="grid">
+   <div><label>Server Type</label><select id="type"><option>Paper</option><option>Vanilla</option><option>Spigot</option></select></div>
+   <div><label>Player Limit</label><input id="players" type="number" min="1" max="100" value="20"></div>
+  </div>
+  <button class="btn primary" style="width:100%;margin-top:22px">Create Server 🚀</button>
+ </form>
+</div>
+</div>
+
+<script>
+const modal=document.getElementById('modal');
+function openCreate(){modal.classList.add('show')}
+function closeCreate(){modal.classList.remove('show')}
+modal.addEventListener('click',e=>{if(e.target===modal)closeCreate()});
+document.getElementById('form').addEventListener('submit',e=>{
+ e.preventDefault();
+ const name=document.getElementById('name').value.trim();
+ const edition=document.getElementById('edition').value;
+ const version=document.getElementById('version').value;
+ const type=document.getElementById('type').value;
+ const players=document.getElementById('players').value;
+ document.getElementById('serverTitle').textContent=name;
+ document.getElementById('serverType').textContent=edition+" • "+type;
+ document.getElementById('serverVersion').textContent="Minecraft "+version;
+ document.getElementById('serverPlayers').textContent=players+" player slots";
+ document.getElementById('serverCard').classList.add('show');
+ closeCreate();
+ document.getElementById('serverCard').scrollIntoView({behavior:'smooth',block:'center'});
+});
+function copyIp(){navigator.clipboard?.writeText(document.getElementById('serverIp').textContent);alert('Server IP copied!')}
+</script>
+</body>
+</html>
